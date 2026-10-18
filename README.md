@@ -12,7 +12,9 @@ The process runs on your machine. It does not open a port, does not fetch
 URLs, and does not evaluate formulas or macros. CSV export exists and is off
 until you set both an output directory and an explicit flag.
 
-Version 0.1.0. Not published to PyPI, the MCP Registry, or any marketplace.
+Version 0.1.0. Available on [PyPI](https://pypi.org/project/mcp-advanced-excel/)
+and the [official MCP Registry](https://registry.modelcontextprotocol.io/)
+as `io.github.antonio-castellon/mcp-advanced-excel`.
 
 ## What it does
 
@@ -51,7 +53,7 @@ Version 0.1.0. Not published to PyPI, the MCP Registry, or any marketplace.
 
 Python 3.11 or newer.
 
-Once the package is on PyPI (it is not, in this 0.1.0 tree):
+From PyPI with uv:
 
 ```bash
 uvx --from mcp-advanced-excel mcp-advanced-excel
@@ -472,8 +474,7 @@ GitHub Actions runs ruff and pytest on Python 3.11, 3.12, and 3.13.
 
 Canonical name: `io.github.antonio-castellon/mcp-advanced-excel`
 
-`server.json` is the official registry document for that name. This 0.1.0
-tree is not submitted to the registry and the package is not on PyPI. The
+`server.json` is the official registry document for that name. The
 `mcp-name` marker below is the PyPI ownership string, same pattern as
 [mcp-telegram-bridge](https://github.com/antonio-castellon/mcp-telegram-bridge).
 
