@@ -1,0 +1,6 @@
+Instrument: ICP-MS
+
+Sample;Result (mg/L);Flag
+A-1;0,125;ok
+A-2;1.250,5;ok
+Notes: end of report
