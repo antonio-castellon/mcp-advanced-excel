@@ -13,7 +13,7 @@ from .normalize import list_sheets, normalize_file, overview, read_range, write_
 from .plugins import SheetView, get_plugin_host
 
 INSTRUCTIONS = """\
-Community edition of mcp-advanced-excel. Read-only stdio MCP server that
+Free public MCP server. Read-only stdio server that
 extracts tables from messy lab and instrument spreadsheets
 (.xlsx, .xlsm, .xls, .csv, .tsv).
 

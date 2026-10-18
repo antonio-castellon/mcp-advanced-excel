@@ -1,12 +1,12 @@
-"""Extension points for a separate Pro package.
+"""Extension points for optional extension packs.
 
-This module is the community side of the plugin boundary. It defines the
-interfaces and the no-op defaults. It does not implement provenance, instrument
-templates, batch processing, signing, or licence checks, and it does not
-open a network connection.
+This module defines the interfaces and the no-op defaults. It does not
+implement provenance, instrument templates, batch processing, signing, or
+licence checks, and it does not open a network connection.
 
-A private package can register implementations with these entry-point groups
-without forking this repository:
+An extension pack can register implementations with these entry-point groups
+without forking this repository. The GLP Lab Data Pack in
+mcp-glp-audit-proxy Pro is the pack that does that:
 
 - ``mcp_advanced_excel.features`` — offline feature gate
 - ``mcp_advanced_excel.provenance`` — source and cell provenance
@@ -14,8 +14,8 @@ without forking this repository:
 - ``mcp_advanced_excel.batch`` — folder batch processing
 - ``mcp_advanced_excel.signing`` — signed output
 
-The community package registers none of those groups. A feature runs only when
-the gate's ``enabled`` returns true and a provider is installed. The default
+This package registers none of those groups. A feature runs only when the
+gate's ``enabled`` returns true and a provider is installed. The default
 gate returns false and does not read a licence file or contact a server.
 """
 
@@ -51,7 +51,7 @@ class SheetView:
 
 
 class FeatureGate(Protocol):
-    """Offline allow/deny for Pro features.
+    """Offline allow/deny for extension-pack features.
 
     ``enabled`` must not open a socket, fetch a URL, or phone home.
     A replacement may read a local licence file. This package does not.
@@ -82,7 +82,7 @@ class SigningProvider(Protocol):
 
 
 class NullFeatureGate:
-    """Community default. Every Pro feature stays off. No I/O."""
+    """Default. Every extension-pack feature stays off. No I/O."""
 
     def enabled(self, feature: str) -> bool:
         return False
@@ -103,7 +103,7 @@ class NullBatch:
         return {
             "ok": False,
             "error": "not_available",
-            "message": "Batch processing is not part of the community edition.",
+            "message": "Batch processing is not included in this package.",
         }
 
 
@@ -175,7 +175,7 @@ class PluginHost:
         return None
 
     def enrich(self, payload: dict[str, Any], view: SheetView) -> dict[str, Any]:
-        """Apply active Pro hooks. The community default returns ``payload`` unchanged."""
+        """Apply active extension-pack hooks. The default returns ``payload`` unchanged."""
         if self.feature_active("templates"):
             hint = self.templates.match(view)
             if isinstance(hint, dict) and hint:
