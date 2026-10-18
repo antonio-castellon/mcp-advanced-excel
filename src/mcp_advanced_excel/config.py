@@ -12,7 +12,9 @@ from .units import BUILTIN, UnitSpec, load_units_file
 DEFAULT_MAX_FILE_BYTES = 25 * 1024 * 1024
 DEFAULT_MAX_ROWS = 5_000
 DEFAULT_MAX_COLUMNS = 128
-DEFAULT_MAX_SCAN_ROWS = 10_000
+# Furthest sheet row a single call will stream. Skipped rows are not stored.
+# The detection prefix is much smaller (see grid.DETECT_PREFIX_ROWS).
+DEFAULT_MAX_SCAN_ROWS = 100_000
 
 _CEILING_FILE = 100 * 1024 * 1024
 _CEILING_ROWS = 100_000
@@ -51,6 +53,7 @@ class Settings:
     max_rows: int = DEFAULT_MAX_ROWS
     max_columns: int = DEFAULT_MAX_COLUMNS
     max_scan_rows: int = DEFAULT_MAX_SCAN_ROWS
+    redact: str = "off"
     units: dict[str, UnitSpec] = field(default_factory=lambda: dict(BUILTIN))
 
     @classmethod
@@ -90,32 +93,41 @@ class Settings:
                 ceiling=_CEILING_COLUMNS,
             ),
             max_scan_rows=max(max_scan, max_rows),
+            redact=_parse_redact(os.getenv("EXCEL_REDACT")),
             units=units,
         )
 
 
+def _parse_redact(raw: str | None) -> str:
+    text = (raw or "").strip().lower()
+    if text in {"secrets", "on", "1", "true", "yes"}:
+        return "secrets"
+    return "off"
+
+
 def load_dotenv_if_present(path: Path | None = None) -> None:
-    """Best-effort load of a local .env without adding a dependency."""
-    candidates: list[Path] = []
-    if path is not None:
-        candidates.append(path)
+    """Load a dotenv file only when the caller passes a path or sets EXCEL_DOTENV.
+
+    The process does not read ``.env`` from the working directory.
+    """
+    if path is None:
+        raw = (os.getenv("EXCEL_DOTENV") or "").strip()
+        if not raw:
+            return
+        candidate = Path(raw).expanduser()
     else:
-        candidates.append(Path.cwd() / ".env")
-        here = Path(__file__).resolve()
-        candidates.append(here.parents[2] / ".env")
-    for candidate in candidates:
-        if not candidate.is_file():
-            continue
-        try:
-            for line in candidate.read_text(encoding="utf-8").splitlines():
-                stripped = line.strip()
-                if not stripped or stripped.startswith("#") or "=" not in stripped:
-                    continue
-                key, _, value = stripped.partition("=")
-                key = key.strip()
-                value = value.strip().strip("'").strip('"')
-                if key and key not in os.environ:
-                    os.environ[key] = value
-        except OSError:
-            continue
-        break
+        candidate = path
+    if not candidate.is_file():
+        return
+    try:
+        for line in candidate.read_text(encoding="utf-8").splitlines():
+            stripped = line.strip()
+            if not stripped or stripped.startswith("#") or "=" not in stripped:
+                continue
+            key, _, value = stripped.partition("=")
+            key = key.strip()
+            value = value.strip().strip("'").strip('"')
+            if key and key not in os.environ:
+                os.environ[key] = value
+    except OSError:
+        return

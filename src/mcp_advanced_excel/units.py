@@ -72,8 +72,9 @@ def unit_key(raw: str) -> str:
         text = text.replace(mark, "u")
     text = text.replace(_DEGREE, "deg")
     text = text.lower()
+    # "mg per L" is a unit. "percent" and "ampere" are not.
+    text = re.sub(r"\s+per\s+", "/", text)
     text = text.replace(" ", "").replace("_", "")
-    text = text.replace("per", "/")
     # mg.L-1 and mgL-1, common on chromatography reports.
     text = re.sub(r"^([a-z]+)(?:\.)?([a-z]+)-1$", r"\1/\2", text)
     return text
@@ -142,6 +143,7 @@ def _build_builtin() -> dict[str, UnitSpec]:
     add(_spec("kPa", "pressure", 1000.0), "MPa", "mpa")
     add(_spec("kPa", "pressure", 100.0), "bar")
     add(_spec("kPa", "pressure", 0.1), "mbar")
+    add(_spec("kPa", "pressure", 0.1), "hPa", "hpa")
     add(_spec("kPa", "pressure", 101.325), "atm")
     add(_spec("kPa", "pressure", 6.8947572932), "psi")
     add(_spec("kPa", "pressure", 0.1333223874), "mmHg", "torr")

@@ -33,7 +33,10 @@ def test_parse_dot_thousands_and_qualifiers() -> None:
     censored = parse_number("<0,5", "comma")
     assert censored.kind == "censored"
     assert censored.qualifier == "<"
-    assert censored.number == 0.5
+    assert censored.number is None
+    assert censored.text == "<0,5"
+    assert parse_number("<LOD", "dot").kind == "censored"
+    assert parse_number("<LOD", "dot").number is None
 
 
 def test_identifiers_and_nulls_stay_non_numeric() -> None:

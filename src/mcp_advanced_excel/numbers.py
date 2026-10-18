@@ -16,6 +16,8 @@ DecimalStyle = Literal["comma", "dot"]
 
 _NULL = re.compile(r"(?i)^(na|n/?a|n\.?d\.?|nan|null|none|nil|na_na|tbd|---+)$")
 _QUALIFIER = re.compile(r"^(<=|>=|<|>)\s*(.+)$")
+# LOD/LOQ tokens are measurements that were not quantified. They are not numbers.
+_CENSOR_WORD = re.compile(r"(?i)^(lod|loq|dl|nd|bdl|bql|not[\s_-]*detected|below[\s_-]*detection)$")
 # One decimal separator, optional exponent: 12,5 / 12.5 / 1e-3.
 _SIMPLE_NUMBER = re.compile(r"^[+-]?(?:\d+(?:[.,]\d+)?|\d*[.,]\d+)(?:[eE][+-]?\d+)?$")
 # Thousands groups plus an optional decimal tail: 1.250,5 / 1,234.56 / 1.234.567.
@@ -34,8 +36,19 @@ class ParsedValue:
     percent: bool = False
 
 
+def _is_censor_token(text: str) -> bool:
+    raw = (text or "").strip()
+    if not raw:
+        return False
+    matched = _QUALIFIER.match(raw)
+    body = matched.group(2).strip() if matched else raw
+    return _CENSOR_WORD.fullmatch(body) is not None
+
+
 def looks_numeric(text: str) -> bool:
-    """True when the cell is a number, including EU decimals and qualifiers."""
+    """True when the cell is a number, a censored limit, or a numeric qualifier."""
+    if _is_censor_token(text):
+        return True
     body, _qualifier, _percent = _peel(text)
     if body is None:
         return False
@@ -99,13 +112,18 @@ def parse_number(text: str, decimal: DecimalStyle) -> ParsedValue:
     if _NULL.fullmatch(raw):
         return ParsedValue("null")
     body, qualifier, percent = _peel(raw)
+    if _is_censor_token(raw):
+        token = qualifier or (body or raw)
+        return ParsedValue("censored", number=None, qualifier=token, text=raw)
     if body is None:
         return ParsedValue("text", text=raw)
     number = _to_number(body, decimal)
     if number is None:
         return ParsedValue("text", text=raw)
-    kind: Literal["number", "censored"] = "censored" if qualifier else "number"
-    return ParsedValue(kind, number=number, qualifier=qualifier, percent=percent)
+    if qualifier:
+        # Keep the raw text. Do not turn "<0.5" into the number 0.5.
+        return ParsedValue("censored", number=None, qualifier=qualifier, text=raw, percent=percent)
+    return ParsedValue("number", number=number, percent=percent)
 
 
 def _peel(text: str) -> tuple[str | None, str | None, bool]:

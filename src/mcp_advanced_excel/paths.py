@@ -67,8 +67,8 @@ def resolve_write_file(path: str, roots: tuple[Path, ...], *, overwrite: bool) -
             "EXCEL_OUTPUT_ROOTS is empty. Refusing to write.",
         )
     candidate = _candidate(path)
-    if candidate.suffix.lower() != ".csv":
-        raise ToolFailure("bad_extension", "Cleaned output must use a .csv filename.")
+    if candidate.suffix.lower() not in {".csv", ".json"}:
+        raise ToolFailure("bad_extension", "Cleaned output must use a .csv or .json filename.")
     if candidate.name in {"", ".", ".."}:
         raise ToolFailure("invalid_path", "Output filename is not valid.")
     try:
@@ -84,6 +84,8 @@ def resolve_write_file(path: str, roots: tuple[Path, ...], *, overwrite: bool) -
             "Output path is outside EXCEL_OUTPUT_ROOTS.",
         )
     final = parent / candidate.name
+    if final.is_symlink():
+        raise ToolFailure("invalid_path", "Refusing to write through a symlink.")
     if final.exists() or final.is_symlink():
         try:
             resolved = final.resolve(strict=True)
@@ -117,7 +119,10 @@ def _candidate(path: str) -> Path:
         raise ToolFailure("invalid_path", "URLs are not allowed. Pass a local file path.")
     candidate = Path(raw).expanduser()
     if not candidate.is_absolute():
-        candidate = Path.cwd() / candidate
+        raise ToolFailure(
+            "invalid_path",
+            "Path must be absolute. Relative paths are rejected.",
+        )
     return candidate
 
 
