@@ -11,8 +11,10 @@ FIXTURES = Path(__file__).resolve().parent / "fixtures"
 
 EXPECTED_TOOLS = {
     "excel_list_sheets",
+    "excel_overview",
     "excel_inspect_layout",
     "excel_read_table",
+    "excel_read_range",
     "excel_write_csv",
 }
 
@@ -31,7 +33,8 @@ def test_list_and_read_decimal_comma_csv(fixture_settings: Settings) -> None:
     listed = tools["excel_list_sheets"](path=str(FIXTURES / "decimal_comma.csv"))
     assert listed["ok"] is True
     assert listed["format"] == "csv"
-    assert listed["sheets"] == [{"name": "decimal_comma", "index": 0}]
+    assert listed["sheets"] == [{"name": "decimal_comma", "index": 0, "state": "visible"}]
+    assert listed["content_trust"] == "untrusted"
 
     read = tools["excel_read_table"](path=str(FIXTURES / "decimal_comma.csv"))
     assert read["ok"] is True
@@ -48,7 +51,7 @@ def test_list_and_read_decimal_comma_csv(fixture_settings: Settings) -> None:
 
 def test_xls_mass_units(fixture_settings: Settings) -> None:
     tools = _tools(fixture_settings)
-    read = tools["excel_read_table"](path=str(FIXTURES / "simple.xls"))
+    read = tools["excel_read_table"](path=str(FIXTURES / "simple.xls"), normalize_units=True)
     assert read["ok"] is True
     assert read["format"] == "xls"
     assert read["rows"][0]["name"] == "alpha"
@@ -59,24 +62,16 @@ def test_xls_mass_units(fixture_settings: Settings) -> None:
     assert mass["unit"] == "g"
 
 
-def test_xlsx_open_does_not_load_macros_or_links(fixture_settings: Settings, monkeypatch) -> None:
+def test_xlsx_open_does_not_load_macros_or_links(fixture_settings: Settings) -> None:
+    """xlsx is parsed with defusedxml. openpyxl's workbook loader, which can
+    keep VBA and external links, is not on this path."""
     from mcp_advanced_excel import grid
 
-    seen: list[dict] = []
-    real = grid.load_workbook
-
-    def wrapped(*args, **kwargs):
-        seen.append(kwargs)
-        return real(*args, **kwargs)
-
-    monkeypatch.setattr(grid, "load_workbook", wrapped)
+    assert not hasattr(grid, "load_workbook")
     tools = _tools(fixture_settings)
     result = tools["excel_read_table"](path=str(FIXTURES / "instrument.xlsx"))
     assert result["ok"] is True
-    assert seen
-    assert all(call.get("keep_vba") is False for call in seen)
-    assert all(call.get("data_only") is False for call in seen)
-    assert all(call.get("keep_links") is False for call in seen)
+    assert result["rows"][0]["sample_id"] == "S-001"
 
 
 def test_formula_is_not_evaluated(fixture_settings: Settings) -> None:
@@ -84,8 +79,11 @@ def test_formula_is_not_evaluated(fixture_settings: Settings) -> None:
     read = tools["excel_read_table"](path=str(FIXTURES / "formula.xlsx"))
     assert read["ok"] is True
     assert read["formula_cells"] >= 1
-    assert read["rows"][0]["sum"] == "=1+1"
-    assert any("not evaluated" in warning for warning in read["warnings"])
+    assert read["rows"][0]["sum"] is None
+    assert "formulas" not in read
+    assert any("no cached value" in warning for warning in read["warnings"])
+    shown = tools["excel_read_table"](path=str(FIXTURES / "formula.xlsx"), include_formulas=True)
+    assert shown["formulas"][0]["formula"] == "=1+1"
 
 
 def test_cp1252_degree_symbol(tmp_path: Path) -> None:
@@ -106,13 +104,18 @@ def test_sensitive_token_is_scrubbed(tmp_path: Path) -> None:
         "Sample,Note,Value\nS-1,token sk-abcdefghijklmnopqrst,1\nS-2,password: hunter2,2\n",
         encoding="utf-8",
     )
-    tools = _tools(Settings(allowed_roots=(tmp_path,)))
+    plain = _tools(Settings(allowed_roots=(tmp_path,)))
+    visible = plain["excel_read_table"](path=str(target))
+    assert "sk-abcdefghijklmnopqrst" in str(visible["rows"])
+    assert visible["redactions"] == 0
+    tools = _tools(Settings(allowed_roots=(tmp_path,), redact="secrets"))
     read = tools["excel_read_table"](path=str(target))
     blob = str(read["rows"])
     assert "sk-abcdefghijklmnopqrst" not in blob
     assert "hunter2" not in blob
     assert "[REDACTED]" in blob
     assert read["redactions"] >= 2
+    assert read["redaction_events"]
 
 
 def test_file_size_limit(tmp_path: Path) -> None:
@@ -155,6 +158,7 @@ def test_write_csv_is_off_by_default_and_honours_output_root(tmp_path: Path) -> 
     written = tools["excel_write_csv"](
         path=str(source),
         output_path=str(out / "clean.csv"),
+        normalize_units=True,
     )
     assert written["ok"] is True
     body = (out / "clean.csv").read_text(encoding="utf-8")

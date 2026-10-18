@@ -11,7 +11,9 @@ FIXTURES = Path(__file__).resolve().parent / "fixtures"
 
 
 def test_skips_metadata_blank_rows_and_footer(fixture_settings: Settings) -> None:
-    table = normalize_file(str(FIXTURES / "instrument.xlsx"), fixture_settings)
+    table = normalize_file(
+        str(FIXTURES / "instrument.xlsx"), fixture_settings, normalize_units=True
+    )
     payload = table.as_dict(include_rows=True)
     assert payload["sheet"] == "Results"
     assert payload["header_rows"] == [4]
@@ -42,7 +44,9 @@ def test_skips_metadata_blank_rows_and_footer(fixture_settings: Settings) -> Non
 
 
 def test_multi_row_header_and_merged_cells(fixture_settings: Settings) -> None:
-    table = normalize_file(str(FIXTURES / "merged_header.xlsx"), fixture_settings)
+    table = normalize_file(
+        str(FIXTURES / "merged_header.xlsx"), fixture_settings, normalize_units=True
+    )
     payload = table.as_dict(include_rows=True)
     assert payload["merged_ranges"] >= 1
     assert payload["header_rows"] == [3, 4]

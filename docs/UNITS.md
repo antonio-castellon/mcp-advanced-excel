@@ -7,6 +7,11 @@ source unit is preserved on each column as `source_unit`.
 Conversion is `canonical = value * factor + offset`. Temperature needs the
 offset. Everything else uses `offset = 0`.
 
+Numeric conversion is off unless the tool is called with `normalize_units`
+true. The column still reports `source_unit` and, when the token is known,
+`canonical_unit`. A censored value such as `<LOD` or `<0.5` is never converted
+and is never turned into a number.
+
 `ppm` is the dilute aqueous approximation `1 ppm = 1 mg/L`. The column
 carries `unit_note` when that alias is used. Mass-per-volume factors other
 than `ppm` are exact SI conversions. `1 ug/mL = 1 mg/L`.
@@ -19,7 +24,7 @@ than `ppm` are exact SI conversions. `1 ug/mL = 1 mg/L`.
 | temperature | degC | degC, C with a degree sign, K, degF |
 | mass | g | g, mg, ug, ng, kg |
 | volume | mL | mL, L, uL, dL |
-| pressure | kPa | kPa, Pa, bar, atm, psi, mmHg |
+| pressure | kPa | kPa, Pa, hPa, bar, atm, psi, mmHg |
 | length | m | m, cm, mm, um, nm, km |
 | time | s | s, ms, min, h |
 | fraction | % | %, percent |

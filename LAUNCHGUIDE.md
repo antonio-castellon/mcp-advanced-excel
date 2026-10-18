@@ -15,7 +15,7 @@ Read-only by default. File access is limited to an explicit directory allowlist 
 - `EXCEL_MAX_FILE_BYTES`, `EXCEL_MAX_ROWS`, `EXCEL_MAX_COLUMNS`, `EXCEL_MAX_SCAN_ROWS` (optional): Caps, clamped to built-in ceilings.
 - `EXCEL_UNITS_FILE` (optional): JSON unit overlay, must sit inside the read allowlist.
 
-Install: `uvx --from mcp-advanced-excel mcp-advanced-excel` (or `pip install mcp-advanced-excel`). Requires Python 3.11+.
+Install from a checkout (`pip install -e .`). This package is not on PyPI yet, so `uvx --from mcp-advanced-excel` will not work until a publish. Requires Python 3.11+.
 
 ## Category
 Data & Analytics
@@ -28,12 +28,13 @@ Lab instrument data cleanup, LIMS/ELN import prep, QC result review, Unit harmon
 - Reads .xlsx, .xlsm, .xls, .csv, .tsv
 - Header and table detection (metadata, blank rows, footers, multi-row and merged headers)
 - Stable snake_case column names with unit metadata
-- Unit normalization from a data-driven unit table
+- Unit parsing, with numeric conversion only when requested
 - Decimal comma and thousands separator parsing; UTF-8/UTF-16/cp1252 input
-- Directory allowlist, symlink and traversal protection, size/row/column caps
-- No macros, no formula evaluation, no network
-- Optional, off-by-default CSV export
-- Outbound scrubbing of token-shaped secrets
+- `<LOD` / `<LOQ` kept as text and flagged, never invented as a number
+- Directory allowlist, symlink and traversal protection, zip-bomb guard, size caps
+- No macros, cached formula values only, no network
+- Optional, off-by-default CSV or JSON export
+- Optional scrubbing of token-shaped secrets (off by default, no SSN rule)
 
 ## Getting Started
 - "What sheets are in this instrument export?" -> `excel_list_sheets`

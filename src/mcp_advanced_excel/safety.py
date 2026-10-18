@@ -1,4 +1,8 @@
-"""Scrub obviously sensitive tokens from cell text before it leaves the process."""
+"""Optional scrubbing of token-shaped secrets in cell text.
+
+Redaction is off unless the caller asks for it. Lab identifiers such as
+``123-45-6789`` are not treated as secrets.
+"""
 
 from __future__ import annotations
 
@@ -31,31 +35,41 @@ _SECRET_ASSIGN = re.compile(
 _LABELED_SECRET = re.compile(
     r"""(?ix)
     \b(password|passwd|secret|api[_\s-]?key|access[_\s-]?token|bot\s*token)
-    \b\s*[:=]\s*\S+
+    \b(\s*[:=]\s*)(\S+)
     """
 )
 
-_SSN = re.compile(r"\b\d{3}-\d{2}-\d{4}\b")
 
+def scrub_text(text: str) -> tuple[str, list[str]]:
+    """Return scrubbed text and the kinds of replacement that were made.
 
-def scrub_text(text: str) -> tuple[str, int]:
-    """Return scrubbed text and how many replacements were made."""
+    Kinds are ``token``, ``assignment``, and ``labeled``. The secret itself
+    is not returned.
+    """
     if not text:
-        return text, 0
-    count = 0
+        return text, []
+    kinds: list[str] = []
 
-    def _sub(pattern: re.Pattern[str], repl: str, value: str) -> str:
-        nonlocal count
+    def apply(pattern: re.Pattern[str], kind: str, repl) -> None:
+        nonlocal text
 
-        def _one(_match: re.Match[str]) -> str:
-            nonlocal count
-            count += 1
-            return repl
+        def one(match: re.Match[str]) -> str:
+            replaced = repl(match) if callable(repl) else repl
+            if replaced != match.group(0):
+                kinds.append(kind)
+            return replaced
 
-        return pattern.sub(_one, value)
+        text = pattern.sub(one, text)
 
-    scrubbed = _sub(_TOKENISH, "[REDACTED]", text)
-    scrubbed = _sub(_SECRET_ASSIGN, r"\1=[REDACTED]", scrubbed)
-    scrubbed = _sub(_LABELED_SECRET, "[REDACTED]", scrubbed)
-    scrubbed = _sub(_SSN, "[REDACTED-ID]", scrubbed)
-    return scrubbed, count
+    apply(_TOKENISH, "token", "[REDACTED]")
+    apply(_SECRET_ASSIGN, "assignment", lambda match: f"{match.group(1)}=[REDACTED]")
+    apply(
+        _LABELED_SECRET,
+        "labeled",
+        lambda match: (
+            match.group(0)
+            if match.group(3) == "[REDACTED]"
+            else f"{match.group(1)}{match.group(2)}[REDACTED]"
+        ),
+    )
+    return text, kinds
