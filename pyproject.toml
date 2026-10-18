@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,17 +7,17 @@ name = "mcp-advanced-excel"
 version = "0.2.0"
 description = "Stdio MCP server that normalizes messy lab and instrument Excel and CSV exports."
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.11"
 authors = [
-  { name = "Antonio Castellon", email = "hello@castellon.ch" },
+  { name = "Antonio Castellon", email = "antonio@castellon.ch" },
 ]
 keywords = ["mcp", "excel", "csv", "laboratory", "openpyxl", "stdio"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
   "Intended Audience :: Science/Research",
-  "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
