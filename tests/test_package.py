@@ -11,12 +11,29 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_readme_is_ascii_and_carries_mcp_name() -> None:
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     readme.encode("ascii")
+    prose = " ".join(readme.split())
     assert "<!-- mcp-name: io.github.antonio-castellon/mcp-advanced-excel -->" in readme
     assert "Available on PyPI" not in readme
-    assert "https://antonio-castellon.github.io" in readme
+    assert "mailto:antonio@castellon.ch" in readme
+    assert "https://antonio-castellon.github.io" not in readme
+    assert "https://github.com/antonio-castellon/mcp-glp-audit-proxy" in readme
+    assert "mcp-glp-audit-proxy-pro" not in readme.lower()
+    assert "designed to support GLP / 21 CFR Part 11 / EU GMP Annex 11 workflows" in prose
+    assert "certified" not in readme.lower()
+    assert "compliant" not in readme.lower()
     assert "Agensi" not in readme
     for doc in (ROOT / "docs").glob("*.md"):
-        doc.read_text(encoding="utf-8").encode("ascii")
+        text = doc.read_text(encoding="utf-8")
+        text.encode("ascii")
+        assert "https://antonio-castellon.github.io" not in text
+        assert "certified" not in text.lower()
+        assert "compliant" not in text.lower()
+        assert "mcp-glp-audit-proxy-pro" not in text.lower()
+        if doc.name == "PLUGINS.md":
+            plugins = " ".join(text.split())
+            assert "mailto:antonio@castellon.ch" in text
+            assert "https://github.com/antonio-castellon/mcp-glp-audit-proxy" in text
+            assert "designed to support GLP / 21 CFR Part 11 / EU GMP Annex 11 workflows" in plugins
 
 
 def test_server_json_matches_registry_shape() -> None:
