@@ -6,7 +6,7 @@ claim anything those repositories do not say.
 
 | | mcp-advanced-excel 0.2.0 (this repo) | [haris-musa/excel-mcp-server](https://github.com/haris-musa/excel-mcp-server) | [negokaz/excel-mcp-server](https://github.com/negokaz/excel-mcp-server) |
 | --- | --- | --- | --- |
-| Stars on 18 Oct 2026 | private community repo | 4247 | 1041 |
+| Stars on 18 Oct 2026 | no public star count on that date | 4247 | 1041 |
 | Last push seen | this release | 2026-10-18 | 2025-07-19 |
 | Language | Python | Python | Node.js |
 | Tools | 6 | 46 (TOOLS.md) | 7 (README) |
