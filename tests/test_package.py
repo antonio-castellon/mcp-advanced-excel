@@ -13,7 +13,12 @@ def test_readme_is_ascii_and_carries_mcp_name() -> None:
     readme.encode("ascii")
     prose = " ".join(readme.split())
     assert "<!-- mcp-name: io.github.antonio-castellon/mcp-advanced-excel -->" in readme
-    assert "Available on PyPI" not in readme
+    assert "Available on PyPI" in readme
+    assert "official MCP Registry" in prose
+    assert "uvx mcp-advanced-excel" in readme
+    assert "pip install mcp-advanced-excel" in readme
+    assert "publish has not happened" not in readme
+    assert "not published" not in readme.lower()
     assert "mailto:antonio@castellon.ch" in readme
     assert "https://antonio-castellon.github.io" not in readme
     assert "https://github.com/antonio-castellon/mcp-glp-audit-proxy" in readme
@@ -55,3 +60,8 @@ def test_pyproject_pins_mcp_above_the_streamable_http_advisory() -> None:
     assert "defusedxml" in text
     assert "mcp>=1.30.0,<2" in text
     assert "mcp-advanced-excel = " in text
+    assert 'email = "antonio@castellon.ch"' in text
+    assert "hello@" not in text
+    assert 'license = "MIT"' in text
+    assert 'license-files = ["LICENSE"]' in text
+    assert "License :: OSI Approved :: MIT License" not in text

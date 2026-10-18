@@ -2,7 +2,7 @@
   "mcpServers": {
     "advanced-excel": {
       "command": "uvx",
-      "args": ["--from", "mcp-advanced-excel", "mcp-advanced-excel"],
+      "args": ["mcp-advanced-excel"],
       "env": {
         "EXCEL_ALLOWED_ROOTS": "/data/instruments",
         "EXCEL_ALLOW_WRITE": "0",

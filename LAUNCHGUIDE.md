@@ -15,7 +15,7 @@ Read-only by default. File access is limited to an explicit directory allowlist 
 - `EXCEL_MAX_FILE_BYTES`, `EXCEL_MAX_ROWS`, `EXCEL_MAX_COLUMNS`, `EXCEL_MAX_SCAN_ROWS` (optional): Caps, clamped to built-in ceilings.
 - `EXCEL_UNITS_FILE` (optional): JSON unit overlay, must sit inside the read allowlist.
 
-Install from a checkout (`pip install -e .`). This package is not on PyPI yet, so `uvx --from mcp-advanced-excel` will not work until a publish. Requires Python 3.11+.
+Available on PyPI and the official MCP Registry. Install with `uvx mcp-advanced-excel` or `pip install mcp-advanced-excel`. Requires Python 3.11+.
 
 ## Category
 Data & Analytics
