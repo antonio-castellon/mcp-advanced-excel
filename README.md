@@ -1,3 +1,12 @@
+<p>
+  <a href="https://pypi.org/project/mcp-advanced-excel/"><img src="https://img.shields.io/pypi/v/mcp-advanced-excel" alt="PyPI version"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
+  <img src="https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-3776AB?logo=python&amp;logoColor=white" alt="Python 3.11, 3.12, and 3.13">
+  <a href="https://modelcontextprotocol.io/"><img src="https://img.shields.io/badge/MCP-stdio-111827" alt="MCP stdio"></a>
+</p>
+
+![mcp-advanced-excel](https://raw.githubusercontent.com/antonio-castellon/mcp-advanced-excel/main/docs/images/banner.png)
+
 # mcp-advanced-excel
 
 **Lab and instrument spreadsheet reader for MCP agents.**

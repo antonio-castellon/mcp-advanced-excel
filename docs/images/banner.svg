@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="320" viewBox="0 0 1280 320" role="img">
+  <title>mcp-advanced-excel</title>
+  <desc>Normalizes messy lab Excel and CSV exports into clean structured tables.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0E1C2E"/>
+      <stop offset="1" stop-color="#16344C"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#F4F8FB" stroke-opacity="0.06" stroke-width="1"/>
+    </pattern>
+    <filter id="cardShadow" x="-15%" y="-15%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#061018" flood-opacity="0.38"/>
+    </filter>
+    <clipPath id="cardClip">
+      <rect x="752" y="40" width="480" height="240" rx="14"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1280" height="320" fill="url(#bg)"/>
+  <rect width="1280" height="320" fill="url(#grid)"/>
+  <rect width="6" height="320" fill="#D4A056"/>
+
+  <text x="56" y="112" fill="#E0B56A" font-family="Inter, Liberation Sans, sans-serif" font-size="13" font-weight="600" letter-spacing="2.6">MCP SERVER</text>
+  <text x="56" y="168" fill="#F7FAFC" font-family="Inter, Liberation Sans, sans-serif" font-size="48" font-weight="600">mcp-advanced-excel</text>
+  <text x="56" y="210" fill="#D0DCE6" font-family="Inter, Liberation Sans, sans-serif" font-size="18">Normalizes messy lab Excel and CSV exports into clean structured tables.</text>
+
+  <g filter="url(#cardShadow)">
+    <rect x="752" y="18" width="96" height="28" rx="8" fill="#13293F"/>
+    <g clip-path="url(#cardClip)">
+      <rect x="752" y="40" width="480" height="240" fill="#F7F9FB"/>
+      <rect x="752" y="40" width="480" height="42" fill="#13293F"/>
+      <line x1="792" y1="40" x2="792" y2="280" stroke="#E3EAF1" stroke-width="1"/>
+      <line x1="908" y1="82" x2="908" y2="280" stroke="#E3EAF1" stroke-width="1"/>
+      <line x1="1056" y1="82" x2="1056" y2="280" stroke="#E3EAF1" stroke-width="1"/>
+      <line x1="1156" y1="82" x2="1156" y2="280" stroke="#E3EAF1" stroke-width="1"/>
+      <line x1="752" y1="148" x2="1232" y2="148" stroke="#E3EAF1" stroke-width="1"/>
+      <line x1="752" y1="214" x2="1232" y2="214" stroke="#E3EAF1" stroke-width="1"/>
+      <rect x="1064" y="96" width="84" height="38" rx="6" fill="#F6E6C8"/>
+      <rect x="1064" y="162" width="84" height="38" rx="6" fill="#F8EFE6"/>
+    </g>
+  </g>
+
+  <text x="772" y="36" fill="#F7FAFC" font-family="Inter, Liberation Sans, sans-serif" font-size="12" font-weight="600">Results</text>
+  <text x="808" y="66" fill="#E8EEF4" font-family="Inter, Liberation Sans, sans-serif" font-size="13" font-weight="600">Sample</text>
+  <text x="924" y="66" fill="#E8EEF4" font-family="Inter, Liberation Sans, sans-serif" font-size="13" font-weight="600">Analyte</text>
+  <text x="1106" y="66" text-anchor="middle" fill="#E8EEF4" font-family="Inter, Liberation Sans, sans-serif" font-size="13" font-weight="600">Result</text>
+  <text x="1172" y="66" fill="#E8EEF4" font-family="Inter, Liberation Sans, sans-serif" font-size="13" font-weight="600">Unit</text>
+
+  <text x="772" y="122" text-anchor="middle" fill="#8B9AAB" font-family="Inter, Liberation Sans, sans-serif" font-size="13">1</text>
+  <text x="808" y="122" fill="#1C2B38" font-family="Inter, Liberation Sans, sans-serif" font-size="15">S-001</text>
+  <text x="924" y="122" fill="#1C2B38" font-family="Inter, Liberation Sans, sans-serif" font-size="15">Caffeine</text>
+  <text x="1106" y="122" text-anchor="middle" fill="#6A4512" font-family="Inter, Liberation Sans, sans-serif" font-size="15" font-weight="600">12.5</text>
+  <text x="1172" y="122" fill="#5C6E80" font-family="Inter, Liberation Sans, sans-serif" font-size="15">ug/mL</text>
+
+  <text x="772" y="188" text-anchor="middle" fill="#8B9AAB" font-family="Inter, Liberation Sans, sans-serif" font-size="13">2</text>
+  <text x="808" y="188" fill="#1C2B38" font-family="Inter, Liberation Sans, sans-serif" font-size="15">S-002</text>
+  <text x="924" y="188" fill="#1C2B38" font-family="Inter, Liberation Sans, sans-serif" font-size="15">Caffeine</text>
+  <text x="1106" y="188" text-anchor="middle" fill="#8C5A32" font-family="Inter, Liberation Sans, sans-serif" font-size="15" font-weight="600">&lt;LOD</text>
+  <text x="1172" y="188" fill="#5C6E80" font-family="Inter, Liberation Sans, sans-serif" font-size="15">ug/mL</text>
+
+  <text x="772" y="254" text-anchor="middle" fill="#8B9AAB" font-family="Inter, Liberation Sans, sans-serif" font-size="13">3</text>
+  <text x="808" y="254" fill="#1C2B38" font-family="Inter, Liberation Sans, sans-serif" font-size="15">S-003</text>
+  <text x="924" y="254" fill="#1C2B38" font-family="Inter, Liberation Sans, sans-serif" font-size="15">Benzoic</text>
+  <text x="1106" y="254" text-anchor="middle" fill="#1C2B38" font-family="Inter, Liberation Sans, sans-serif" font-size="15">0.80</text>
+  <text x="1172" y="254" fill="#5C6E80" font-family="Inter, Liberation Sans, sans-serif" font-size="15">ug/mL</text>
+</svg>

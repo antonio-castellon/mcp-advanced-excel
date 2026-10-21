@@ -1,5 +1,7 @@
 # Security model
 
+To report a vulnerability, use the private Security tab. See [SECURITY.md](../SECURITY.md).
+
 `mcp-advanced-excel` reads local spreadsheets for an MCP host. It is not a
 network service. The threat model is an agent, or a prompt, that is talked
 into opening a path it should not open, writing a cleaned file somewhere it
