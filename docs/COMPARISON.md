@@ -4,7 +4,7 @@ Checked 18 Oct 2026 against the default-branch READMEs and tool lists.
 Star counts are the GitHub stargazer counts on that date. This file does not
 claim anything those repositories do not say.
 
-| | mcp-advanced-excel 0.2.0 (this repo) | [haris-musa/excel-mcp-server](https://github.com/haris-musa/excel-mcp-server) | [negokaz/excel-mcp-server](https://github.com/negokaz/excel-mcp-server) |
+| | mcp-advanced-excel 0.3.0 (this repo) | [haris-musa/excel-mcp-server](https://github.com/haris-musa/excel-mcp-server) | [negokaz/excel-mcp-server](https://github.com/negokaz/excel-mcp-server) |
 | --- | --- | --- | --- |
 | Stars on 18 Oct 2026 | no public star count on that date | 4247 | 1041 |
 | Last push seen | this release | 2026-10-18 | 2025-07-19 |

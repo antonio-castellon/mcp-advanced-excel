@@ -422,9 +422,9 @@ follows or replaces a symlink. The write is atomic (`mkstemp`, fsync,
 
 The full model is [docs/SECURITY.md](docs/SECURITY.md). Short version:
 
-- Stdio only. Dependency floor is `mcp>=1.30.0,<2`, the first 1.x release
-  that fixes GHSA-84m7-p3x7-pcfv / CVE-2026-59951. Versions 2.0.0 through
-  2.1.1 are also affected, so this package stays on the patched 1.x line.
+- Stdio only. Dependency range is `mcp>=2.3.0,<3`, above every release
+  affected by GHSA-84m7-p3x7-pcfv / CVE-2026-59951 (2.0.0 through 2.1.1 on
+  the 2.x line).
 - Empty allowlist denies every read. Paths must be absolute. Symlinks are
   resolved and must still land inside a root.
 - xlsx zip bombs are refused (uncompressed size above 200 MiB, or ratio

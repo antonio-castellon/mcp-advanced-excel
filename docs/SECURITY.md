@@ -9,14 +9,13 @@ should not write, or repeating a secret that was sitting in a cell.
 
 ## Transport
 
-The process speaks MCP over stdio only (`FastMCP.run(transport="stdio")`).
+The process speaks MCP over stdio only (`MCPServer.run(transport="stdio")`).
 It does not start the Streamable HTTP or SSE transports. The dependency floor
-is `mcp>=1.30.0,<2`.
+is `mcp>=2.3.0,<3`.
 
-That floor is the first 1.x release that fixes GHSA-84m7-p3x7-pcfv /
+That floor is above every release affected by GHSA-84m7-p3x7-pcfv /
 CVE-2026-59951 (unbounded Streamable HTTP session retention, fixed in 1.30.0
-and in 2.2.0). Versions 2.0.0 through 2.1.1 are also affected, and 2.x changes
-the server API, so this package stays on the patched 1.x line. Stdio itself
+and in 2.2.0). On the 2.x line, versions 2.0.0 through 2.1.1 are affected. Stdio itself
 was not the vulnerable transport; the pin is there so a scanner, or a later
 edit that enables HTTP, is not sitting on an affected release.
 
