@@ -128,11 +128,27 @@ def test_read_tools_are_annotated_read_only() -> None:
         "excel_read_table",
         "excel_read_range",
     ):
-        assert tools[name].annotations.readOnlyHint is True
-        assert tools[name].annotations.destructiveHint is False
+        assert tools[name].annotations.read_only_hint is True
+        assert tools[name].annotations.destructive_hint is False
     write = tools["excel_write_csv"].annotations
-    assert write.readOnlyHint is False
-    assert write.destructiveHint is False
+    assert write.read_only_hint is False
+    assert write.destructive_hint is False
+
+
+def test_server_info_reports_package_version() -> None:
+    import anyio
+    from mcp.client import Client
+
+    from mcp_advanced_excel import __version__
+
+    async def handshake():
+        async with Client(create_server(Settings()), mode="legacy") as client:
+            return client.server_info
+
+    info = anyio.run(handshake)
+    assert info is not None
+    assert info.name == "mcp-advanced-excel"
+    assert info.version == __version__
 
 
 def test_csv_prefixes_minus_and_refuses_symlink_output(tmp_path: Path) -> None:

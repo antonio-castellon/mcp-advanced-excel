@@ -4,9 +4,10 @@ from __future__ import annotations
 
 from typing import Any
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 from mcp.types import ToolAnnotations
 
+from . import __version__
 from .config import Settings, load_dotenv_if_present
 from .errors import ToolFailure
 from .normalize import list_sheets, normalize_file, overview, read_range, write_cleaned_csv
@@ -47,13 +48,14 @@ _WRITE = ToolAnnotations(
 )
 
 
-def create_server(settings: Settings | None = None) -> FastMCP:
-    """Build the FastMCP app. Pass settings in tests; main() loads the environment."""
+def create_server(settings: Settings | None = None) -> MCPServer:
+    """Build the MCPServer app. Pass settings in tests; main() loads the environment."""
     cfg = settings if settings is not None else Settings.from_env()
 
-    mcp = FastMCP(
-        name="mcp-advanced-excel",
+    mcp = MCPServer(
+        "mcp-advanced-excel",
         instructions=INSTRUCTIONS,
+        version=__version__,
         log_level="WARNING",
     )
 
@@ -268,7 +270,7 @@ def _finish(payload: dict[str, Any]) -> dict[str, Any]:
     return get_plugin_host().enrich(payload, view)
 
 
-def list_tool_names(server: FastMCP | None = None) -> list[str]:
+def list_tool_names(server: MCPServer | None = None) -> list[str]:
     """Return registered tool names without starting stdio."""
     app = server or create_server(Settings())
     tools = app._tool_manager.list_tools()

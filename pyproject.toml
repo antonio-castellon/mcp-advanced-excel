@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mcp-advanced-excel"
-version = "0.2.0"
+version = "0.3.0"
 description = "Stdio MCP server that normalizes messy lab and instrument Excel and CSV exports."
 readme = "README.md"
 license = "MIT"
@@ -25,9 +25,9 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Information Analysis",
 ]
 dependencies = [
-  # Floor is the first 1.x release that fixes GHSA-84m7-p3x7-pcfv
-  # (CVE-2026-59951). 2.0.0 through 2.1.1 are also affected, so stay on 1.x.
-  "mcp>=1.30.0,<2",
+  # 2.x API. GHSA-84m7-p3x7-pcfv (CVE-2026-59951) affects 2.0.0 through
+  # 2.1.1 and is fixed in 2.2.0, so the floor is above every affected release.
+  "mcp>=2.3.0,<3",
   "openpyxl>=3.1.2,<4",
   "xlrd>=2.0.1,<3",
   "defusedxml>=0.7.1,<1",
@@ -38,6 +38,7 @@ dev = [
   "pytest>=8",
   "ruff>=0.9",
   "xlwt>=1.3",
+  "pip-audit>=2.9,<3",
 ]
 
 [project.scripts]
