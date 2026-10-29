@@ -3,7 +3,31 @@ name: CI
 on:
   push:
     branches: [main]
+    # Same as paths-ignore for "**/*.md", "docs/**", and LICENSE, except that
+    # README.md and docs/*.md still run CI: tests/test_package.py checks them.
+    # paths-ignore cannot re-include files, so this uses paths with "!".
+    paths:
+      - "**"
+      - "!**/*.md"
+      - "!docs/**"
+      - "!LICENSE"
+      - "README.md"
+      - "docs/*.md"
   pull_request:
+    # Same as paths-ignore for "**/*.md", "docs/**", and LICENSE, except that
+    # README.md and docs/*.md still run CI: tests/test_package.py checks them.
+    # paths-ignore cannot re-include files, so this uses paths with "!".
+    paths:
+      - "**"
+      - "!**/*.md"
+      - "!docs/**"
+      - "!LICENSE"
+      - "README.md"
+      - "docs/*.md"
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -29,7 +53,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.11", "3.12", "3.13"]
+        # Full matrix on pull requests; pushes to main run 3.12 only.
+        python-version: ${{ fromJSON(github.event_name == 'pull_request' && '["3.11", "3.12", "3.13"]' || '["3.12"]') }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
