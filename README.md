@@ -1,7 +1,7 @@
 <p>
   <a href="https://pypi.org/project/mcp-advanced-excel/"><img src="https://img.shields.io/pypi/v/mcp-advanced-excel" alt="PyPI version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
-  <img src="https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-3776AB?logo=python&amp;logoColor=white" alt="Python 3.11, 3.12, and 3.13">
+  <img src="https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-3776AB?logo=python&logoColor=white" alt="Python 3.11, 3.12, and 3.13">
   <a href="https://modelcontextprotocol.io/"><img src="https://img.shields.io/badge/MCP-stdio-111827" alt="MCP stdio"></a>
 </p>
 
@@ -464,3 +464,12 @@ Synthetic fixtures live in `tests/fixtures/`. Regenerate the workbooks with
 ## License
 
 MIT. Copyright Antonio Castellon.
+
+## Notice and Disclaimer
+
+NOTICE AND DISCLAIMER: This software automatically retrieves, accesses or interacts with external materials. Those retrieved materials are not distributed with this software and are governed solely by separate terms, conditions and licenses. You are solely responsible for finding, reviewing and complying with all applicable terms, conditions, and licenses, and for verifying the security, integrity and suitability of any retrieved materials for your specific use case. This software is provided "AS IS", without warranty of any kind. The author makes no representations or warranties regarding any retrieved materials, and assumes no liability for any losses, damages, liabilities or legal consequences from your use or inability to use this software or any retrieved materials. Use this software and the retrieved materials at your own risk.
+
+External materials mcp-advanced-excel interacts with at run time:
+
+- Only the local Excel/CSV files under the folders you allow (EXCEL_ALLOWED_ROOTS); it is read-only unless EXCEL_ALLOW_WRITE is set.
+- The MCP host and models that read its output, under their own terms.
